@@ -1,5 +1,47 @@
 function isikukood(kood){
 	kood = kood.toString()
+
+	function kontrollnumber(id){
+		tot = 1
+		astmekaal = 1
+		for (const i of id){
+			tot += parseInt(i) * astmekaal
+			if (astmekaal >= 9){
+				astmekaal = 1
+			}
+			else{
+				astmekaal += 1
+				}
+			}
+		tot = tot % 11
+		if (tot < 10){
+
+			return tot
+		}
+		else{
+			tot = 1
+			astmekaal = 3
+			for (const i of id){
+			tot += parseInt(i) * astmekaal
+			if (astmekaal > 9){
+				astmekaal = 3
+			}
+			else{
+				astmekaal += 1
+			}
+			}
+			tot = tot % 11
+			if (tot === 10){
+				tot = 0
+			}
+			return tot
+		}
+		
+	}
+	let koodikehtivus = true 
+	if (kontrollnumber(kood) != kood.slice(-1)){
+		koodikehtivus = false
+	}
 	let controlnumber = kood[kood.length-1]
 	let gender = ''
 	let birthyear = ''
@@ -68,13 +110,19 @@ function isikukood(kood){
 	else if (parseInt(kood[0]) < 9){
 		birthyear = '21'
 	}
-	birthyear += kood[2] + kood[3]
+	birthyear += kood[1] + kood[2]
 	// contorl number
-	result = `isik isikukoodiga ${kood} on ${gender}. Kes on
-	sündinud aastal ${birthyear}. Tema isikukood registreeriti asutuses 
-	mis kannab nime ${birthplace} ja ta oli sel päeval 
-	${birthorder}-s sündinu
-	 isikukoodi kontroll numbriks on ${controlnumber}.`
-	return result
+	if (koodikehtivus){
+
+		result = `isik isikukoodiga ${kood} on ${gender}. Kes on
+		sündinud aastal ${birthyear}. Tema isikukood registreeriti asutuses 
+		mis kannab nime ${birthplace} ja ta oli sel päeval 
+		${birthorder}-s sündinu
+		 isikukoodi kontroll numbriks on ${controlnumber}.`
+		return result
+		}
+	else{
+		return "Kood ei kehti"
+	}
 }
-console.log(isikukood(49403136515))
+console.log(isikukood(50609212790))
